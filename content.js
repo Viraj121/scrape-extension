@@ -12,21 +12,21 @@ function scrapeTableAndDownload() {
     return;
   }
 
-  let csvContent = "data:text/csv;charset=utf-8,";
+  let csvData = "data:text/csv;charset=utf-8,";
 
   visibleTables.forEach((table, index) => {
-    csvContent += `Table ${index + 1}\n`;
+    csvData += `Table ${index + 1}\n`;
     Array.from(table.rows).forEach((row) => {
       const rowData = Array.from(row.cells)
         .map((cell) => formatCellData(cell))
         .join(",");
-      csvContent += rowData + "\n";
+      csvData += rowData + "\n";
     });
-    csvContent += "\n";
+    csvData += "\n";
   });
 
   // Create a downloadable CSV file
-  const encodedUri = encodeURI(csvContent);
+  const encodedUri = encodeURI(csvData);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
   link.setAttribute("download", "table_data.csv");
@@ -35,7 +35,7 @@ function scrapeTableAndDownload() {
   document.body.removeChild(link);
 }
 
-// Helper function for formatting table cells
+//formatting table cells
 function formatCellData(cell) {
   const cellText = cell.innerText.trim();
 
@@ -48,27 +48,26 @@ function formatCellData(cell) {
 
   // Check for date formats
   if (dateRegex.some((regex) => regex.test(cellText))) {
-    return `'${cellText}`; // Prefix with a single quote to prevent date issues
+    return `'${cellText}`;
   }
 
-  // Phone number regex
+  // Phone number
   const phoneRegex = /^(?:\+?\d{1,3}[-\s]?)?\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$/;
   if (phoneRegex.test(cellText)) {
-    return `"${cellText}"`; // Wrap phone numbers in quotes
+    return `"${cellText}"`;
   }
 
-  // Email regex
+  // Email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (emailRegex.test(cellText)) {
-    return `"${cellText}"`; // Wrap emails in quotes
+    return `"${cellText}"`;
   }
 
-  // Wrap values containing commas in quotes
   if (cellText.includes(",")) {
     return `"${cellText}"`;
   }
 
-  return cellText; // Return plain text if no special formatting is needed
+  return cellText;
 }
 
 // Execute the function when the script loads

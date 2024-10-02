@@ -1,33 +1,26 @@
 {
   "manifest_version": 3,
-  "name": "Table Scraper",
-  "version": "1.1",
+  "name": "Your Extension Name",
+  "version": "1.0",
+  "description": "Your Extension Description",
   "permissions": [
     "activeTab",
-    "scripting",
-    "downloads"
+    "scripting"
   ],
-  "action": {
-    "default_icon": {
-      "16": "./assets/icon.png",
-      "48": "./assets/icon.png",
-      "128": "./assets/icon.png"
-    }
-  },
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ]
+  "action": {
+    "default_popup": "",
+    "default_icon": {
+      "32": "./assets/icon2.png",
+      "48": "./assets/icon2.png",
+      "128": "./assets/icon2.png"
     }
-  ],
+  },
   "icons": {
-    "128": "./assets/icon.png"
+    "32": "./assets/icon2.png",
+    "48": "./assets/icon2.png",
+    "128": "./assets/icon2.png"
   }
 }

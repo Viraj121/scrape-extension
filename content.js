@@ -65,3 +65,6 @@ function formatCellData(cell) {
 
   return cellText; // Return plain text if no special formatting is needed
 }
+
+// Execute the function when the script loads
+scrapeTableAndDownload();

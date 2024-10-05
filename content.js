@@ -25,7 +25,7 @@ function scrapeTableAndDownload() {
     csvData += "\n";
   });
 
-  // Create a downloadable CSV file
+  // Create a CSV file
   const encodedUri = encodeURI(csvData);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -35,7 +35,7 @@ function scrapeTableAndDownload() {
   document.body.removeChild(link);
 }
 
-// Format the table cell data (handling special cases)
+// Format the table cell data
 function formatCellData(cell) {
   const cellText = cell.innerText.trim();
 
@@ -63,20 +63,18 @@ function formatCellData(cell) {
     return `"${cellText}"`;
   }
 
-  // Handle commas in the cell text
   if (cellText.includes(",")) {
     return `"${cellText}"`;
   }
 
-  // Handle empty cells or non-string content
   if (!cellText || cellText.length === 0) {
-    return `""`; // Handle empty cells
+    return `""`;
   }
 
   return cellText;
 }
 
-// Check if the table is visible on the page (considering CSS styles)
+// Check if the table is visible on the page
 function isVisible(element) {
   return !!(
     element.offsetWidth ||
@@ -90,16 +88,13 @@ function handleMergedCells(table) {
   const rowSpanMap = {};
   Array.from(table.rows).forEach((row, rowIndex) => {
     Array.from(row.cells).forEach((cell, colIndex) => {
-      // Check for rowspan
       if (cell.rowSpan > 1) {
         for (let i = 1; i < cell.rowSpan; i++) {
           rowSpanMap[`${rowIndex + i}-${colIndex}`] = cell.innerText.trim();
         }
       }
 
-      // Check for colspan
       if (cell.colSpan > 1) {
-        // Repeat the content for each spanned column
         for (let i = 1; i < cell.colSpan; i++) {
           row.insertCell(colIndex + i).innerText = cell.innerText.trim();
         }
@@ -107,7 +102,6 @@ function handleMergedCells(table) {
     });
   });
 
-  // After handling row spans, update the table rows with the mapped content
   Object.keys(rowSpanMap).forEach((key) => {
     const [rowIndex, colIndex] = key.split("-");
     const row = table.rows[rowIndex];
@@ -117,5 +111,4 @@ function handleMergedCells(table) {
   });
 }
 
-// Execute the function when the script loads
 scrapeTableAndDownload();
